@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<title>Yahoo! Weather</title>
+
+<style>
+body { 
+  background: url("sky.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+</style>
+<script src="http://yui.yahooapis.com/3.13.0/build/yui/yui-min.js"></script>
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/menu/assets/skins/sam/menu.css">
+<link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.9.1/build/cssnormalize/cssnormalize-min.css&3.9.1/build/cssgrids-responsive/cssgrids-responsive-min.css&3.9.1/build/cssbutton/cssbutton-min.css&gallery-2013.03.27-22-06/build/gallerycss-csslist/gallerycss-csslist-min.css&gallery-2013.03.27-22-06/build/gallerycss-csstable/gallerycss-csstable-min.css&gallery-2013.03.27-22-06/build/gallerycss-cssform/gallerycss-cssform-min.css">          
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script> 
+<script src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+
+<div id="fb-root"></div>
+    <script>
+      window.fbAsyncInit = function() {
+        // init the FB JS SDK
+        FB.init({
+          appId      : '195346197318490',                        // App ID from the app dashboard
+          channelUrl : '//http://cs-server.usc.edu:14627/examples/servlets/weather_search.html', // Channel file for x-domain comms
+          status     : true,                                 // Check Facebook Login status
+          xfbml      : true                                  // Look for social plugins on the page
+        });
+    
+        // Additional initialization code such as adding Event Listeners goes here
+      };
+    
+      // Load the SDK asynchronously
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/all.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+       
+       function facebookPosting(){
+          var  currentW= document.getElementById("currentW").checked;
+          var futureW = document.getElementById("futureweather").checked;
+          
+          if (currentW) {
+          		FB.ui({
+          		    method : 'feed',
+          		    name : obj.weather.location.city + ", " + obj.weather.location.region + ", " + obj.weather.location.country,
+          		    link : obj.weather.feed,
+          		    picture : obj.weather.img,
+          		    caption : 'The current condition for ' + obj.weather.location.city + ' is ' + obj.weather.condition.text + ".",
+          		    description : 'Temperature is ' + obj.weather.condition.temp + "&deg;" + obj.weather.units.temperature,           
+          		    properties : {"Look at details":{"text":"here","href" : obj.weather.link }}
+          		 }, function(response) {
+          		 		if (response && response.post_id) {
+          		 			alert('Post was published.');
+          		 		} else {
+          		 			alert('Post was not published.');
+          		 		}
+          		    }          		 
+          	     );
+          } else if (futureW) {
+          		FB.ui({
+          		    method : 'feed',
+          		    name : obj.weather.location.city + ", " + obj.weather.location.region + ", " + obj.weather.location.country,
+          		    link : obj.weather.feed,
+          		    picture : obj.weather.img,
+          		    caption : 'Weather Forecast for ' + obj.weather.location.city,
+          		    description : obj.weather.forecast[0].day + ": " + obj.weather.forecast[0].text + ", " + obj.weather.forecast[0].high + "/" + obj.weather.forecast[0].low + "&deg;" + obj.weather.units.temperature + ";" +
+          		                  obj.weather.forecast[1].day + ": " + obj.weather.forecast[1].text + ", " + obj.weather.forecast[1].high + "/" + obj.weather.forecast[1].low + "&deg;" + obj.weather.units.temperature + ";" +
+          		                  obj.weather.forecast[2].day + ": " + obj.weather.forecast[2].text + ", " + obj.weather.forecast[2].high + "/" + obj.weather.forecast[2].low + "&deg;" + obj.weather.units.temperature + ";" +
+          		                  obj.weather.forecast[3].day + ": " + obj.weather.forecast[3].text + ", " + obj.weather.forecast[3].high + "/" + obj.weather.forecast[3].low + "&deg;" + obj.weather.units.temperature + ";" +
+          		                  obj.weather.forecast[4].day + ": " + obj.weather.forecast[4].text + ", " + obj.weather.forecast[4].high + "/" + obj.weather.forecast[4].low + "&deg;" + obj.weather.units.temperature + ".", 
+          		    properties : {"Look at details":{"text":"here","href" : obj.weather.link }}
+          		 }, function(response) {
+          		 		if (response && response.post_id) {
+          		 			alert('Post was published.');
+          		 		} else {
+          		 			alert('Post was not published.');
+          		 		}
+          		    }          		 
+          	     );               
+          }
+          
+         // alert(type);
+       }
+	   
+	   var sURL;
+	   var tURL;
+   
+   var urlFlag=false;
+	function post()
+{
+        
+	//alert("HIII");
+		var sURL = "http://cs-server.usc.edu:14627/examples/servlet/HelloWorldExample?";
+
+	   
+	    var result = document.forms["form1"]["url"].value;
+	    var result1 = result.replace(" ","");
+		//alert(result1);
+	    var result1 = result1.replace(" ","");
+		sURL += encodeURI(result1);
+	    var result2 = result1.split(",");
+	    var flag = 0;		
+	    
+	    if ( isNaN(result1) )
+		{    
+	        if((result2[1] == null) || (result2[2] != null))
+	
+	        {
+				alert("	Invalid location:must include state or country separated by comma\nExample:Los Angeles, CA");
+				return;
+	        }	
+	        flag = 1;	
+		} 
+		else
+		{  
+		
+		 
+	        var length = result1.length;
+	       if (length > 5) 
+		   {
+	           alert("Invalid Zipcode: must be five digits\nExample:90089");
+				return;		
+	       }
+		 }
+	    
+			
+	    if ( flag ==1) 
+		{
+	        var type = "city";
+	    } 
+		else 
+		{
+	      var type = "zipcode";
+	    }
+		
+		sURL = "http://cs-server.usc.edu:14627/examples/servlet/HelloWorldExample?location="+encodeURI(result1)+"&type="+type;
+		tURL=sURL+"&tempunit=C";
+		//alert(tURL);
+		
+	    var tempunit = "F";
+		
+	    sURL = "http://cs-server.usc.edu:14627/examples/servlet/HelloWorldExample?location="+encodeURI(result1)+"&type="+type+"&tempunit="+tempunit;	
+		//alert(sURL);
+		getXMLHttpRequest(sURL);
+		/*return false;
+		var tunit = "c";
+		surl = "http://cs-server.usc.edu:14627/examples/servlet/HelloWorldExample?location="+encodeURI(result1)+"&type="+type+"&tempunit="+tunit;	
+	    getXMLHttpRequest(surl);
+		*/
+		return false;
+	}
+	
+	
+	
+	var req;
+	function getXMLHttpRequest(sURL) {
+	//alert(sURL);
+		  req= false;
+		 
+		
+		// branch for native XMLHttpRequest object
+		if (window.XMLHttpRequest) {
+		
+		//alert(req);
+			try {
+				req = new XMLHttpRequest();
+				//alert(req);
+			} catch (e) {
+				req = false;
+			}
+			// branch for IE/Windows ActiveX version
+		} else if (window.ActiveXObject) {
+	
+			try {
+				req = new ActiveXObject("Msxml2.XMLHTTP");
+				//alert(req);
+			} catch (e) {
+				try {
+					req = new ActiveXObject("Microsoft.XMLHTTP");
+				} catch (e) {
+					req = false;
+				}
+			}
+		}
+		
+	
+		if (req) {
+		
+		//alert(req);
+			req.open("GET", sURL, true);
+			//alert(sURL);
+			req.onreadystatechange = processReqChange;
+			req.setRequestHeader("Connection", "Close");
+			req.setRequestHeader("Origin", "http://cs-server.usc.edu:14627");
+			req.setRequestHeader("Method", "GET" + sURL + "HTTP/1.1");
+			req.send("");
+		}
+	}
+	
+	
+	function processReqChange()
+{
+
+	if(req.readyState == 4)
+	{
+	//alert(req.readyState);
+	
+		if(req.status == 200)
+		{
+		//alert(req.status);
+			var data = req.responseText;
+			//alert(data);
+			if(data=="")
+			{
+				document.getElementById("errormessage").innerHTML ="Weather information cannot be found!";	
+				return true;
+			}
+			else {
+			obj = eval('(' + data + ')');
+			//alert(obj);
+			document.getElementById("errormessage").innerHTML ="";
+			//alert(obj.weather.feed);
+			document.getElementById("city").innerHTML = "<br/>"+"<a href="+obj.weather.feed+" style=color:white;text-decoration:none>"+obj.weather.location.city+"</a>"+"<br/><br/>";    
+			
+			document.getElementById("country").innerHTML = obj.weather.location.region + ", " + obj.weather.location.country;   
+			document.getElementById("picture").innerHTML = "<br/>"+"<img src=\"" + obj.weather.img + "\"/>"+"&nbsp;&nbsp;"+obj.weather.condition.text+"<br/><br/>";
+			document.getElementById("currfore").innerHTML = "&uarr;"+obj.weather.forecast[0].high+"<sup>o</sup>"+obj.weather.units.temperature+"&nbsp;&nbsp;&nbsp;"+"&darr;"+obj.weather.forecast[0].low+"<sup>o</sup>"+obj.weather.units.temperature;
+			datatable();
+			document.getElementById("temp").innerHTML = "<a href=\"#\" style=color:white>"+obj.weather.units.temperature+"</a>";
+			document.getElementById("tempval").innerHTML = obj.weather.condition.temp + "<sup>&deg;</sup>";
+			//alert(obj.weather.units.temperature);
+			//document.getElementById("temp").innerHTML = obj.weather.condition.temp + "<sup>&deg;</sup>"+"<a href=\"#\" style=color:white>"+obj.weather.units.temperature+"</a>";
+			document.getElementById("fbpost").innerHTML =  "<input id=\"currentW\" type=\"radio\" name=\"radiofield\" value=\"Radio1\"> Post Current Weather <br> <input id=\"futureweather\" type=\"radio\" name=\"radiofield\" value=\"Radio2\"> Post Weather Forecast";
+			document.getElementById("fbpost").innerHTML += "<br><br><a href=\"#\" onClick=\"facebookPosting();\"><img height=30px width=80px src=\"http://www.wired.com/geekmom/wp-content/uploads/2013/01/facebook_logo.jpg\"/></a>"+"<br/><br/><br/><br/><br/><br/><br/><br/><br/>"+"<a href="+obj.weather.link+" style=color:white;text-decoration:none>"+"View Full Details on"+"<br/>"+"<img src=\"yahoo-news-logo.jpg\"/>";
+			//document.getElementById("logo").innerHTML += "<a href="+obj.weather.link+" style=color:white;text-decoration:none>"+"View Full Details on"+"<br/>"+"<img src=\"yahoo-news-logo.jpg\"/></a>";
+			
+			}
+			return true;
+		}
+		else
+		{
+			alert("There was a problem with the request " + req.status);
+			return false;
+		}
+	}
+}
+
+function datatable()
+{
+			document.getElementById("yforecast").innerHTML = "<div style=\"position:relative;color:white;left:.2%;font-size:150%\"> Forecast</div>";
+        
+			YUI().use('datatable', function (Y) {
+				// DataTable is available and ready for use. Add implementation
+				// code here.
+				var columns = [
+                           {key: "Day", label: "Day"},
+                           {key: "Weather", label: "Weather"},
+                           {key: "High", label: "High", formatter : "<font color=\"orange\">{value}&deg;</font>"}, 
+                           {key: "Low", label: "Low", formatter : "<font color=\"blue\">{value}&deg;</font>"}                           
+                         ];
+				var data = [
+					{ Day: obj.weather.forecast[0].day, Weather: obj.weather.forecast[0].text,   High:obj.weather.forecast[0].high+obj.weather.units.temperature, Low: obj.weather.forecast[0].low +obj.weather.units.temperature},
+					{ Day: obj.weather.forecast[1].day, Weather: obj.weather.forecast[1].text,   High:obj.weather.forecast[1].high +obj.weather.units.temperature, Low: obj.weather.forecast[1].low +obj.weather.units.temperature},
+					{ Day: obj.weather.forecast[2].day, Weather: obj.weather.forecast[2].text,   High:obj.weather.forecast[2].high+obj.weather.units.temperature, Low: obj.weather.forecast[2].low+obj.weather.units.temperature },
+					{ Day: obj.weather.forecast[3].day, Weather: obj.weather.forecast[3].text,   High:obj.weather.forecast[3].high+obj.weather.units.temperature, Low: obj.weather.forecast[3].low+obj.weather.units.temperature},
+					{ Day: obj.weather.forecast[4].day, Weather: obj.weather.forecast[4].text,   High:obj.weather.forecast[4].high+obj.weather.units.temperature, Low: obj.weather.forecast[4].low +obj.weather.units.temperature},
+
+					];
+
+				var table = new Y.DataTable({
+                     columns: columns,
+                     data   : data
+					// Optionally configure your table with a caption
+					//caption: "Forecast",
+				});
+
+					table.render("#yforecast");
+			});
+			
+}
+
+function convert()
+{
+if(!urlFlag)
+{
+//alert("HII");
+getXMLHttpRequest(tURL);
+urlFlag=true;
+}
+else
+{
+getXMLHttpRequest(sURL);
+urlFlag=false;
+}
+}
+</script>
+</head>
+<body class="yui3-skin-sam">
+	
+    <div style="position:relative;color:white">
+		<form name="form1" method="GET" class="yui3-form" action=""> 
+            <div style="position:relative;color:white;left:7%;font-size:150%">
+			Location:
+			<input type="text" style="position:relative" name="location" id ="url" placeholder="Enter city or zip code" size="60" />
+            <button type="submit" class="yui3-button" onClick="return post();">Search</button>
+			</div> 
+		</form>
+	</div>        
+    <div id="city" class="yui3-skin-sam" style="position:relative;color:white;left:7%;font-size:300%"> </div>
+    <div id="country" class="yui3-skin-sam" style="position:relative;color:white;left:7%;font-size:150%"> </div>
+    <div id="picture" class="yui3-skin-sam" style="position:relative;color:white;left:7%;font-size:150%"> </div>
+   <div id="currfore" class="yui3-skin-sam" style="position:relative;color:white;left:7%;font-size:150%"> </div>
+    <div id="yforecast" class="yui3-skin-sam"  style="position:relative;left:30%;top:-100px" > </div>
+    <div id="errormessage" class="yui3-skin-sam" style="position:relative;color:white;left:7%;top:2px;font-size:250%"> </div>
+    <div id="fbpost" style="position:relative;color:white;left:60%; top:-230px;"></div>
+	
+    <div id="temp" class="yui3-skin-sam" onClick="return convert();" style="position:relative;color:white;left:22%;width:40px;top:-300px;font-size:400%;"> </div>
+	<div id="tempval" class="yui3-skin-sam" style="position:relative;color:white;left:7%;top:-350px;font-size:1000%"> </div><noscript>
+</body>
+</html>
